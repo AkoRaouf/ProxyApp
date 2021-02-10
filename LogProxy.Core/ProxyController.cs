@@ -9,11 +9,11 @@ namespace LogProxy.Core
     public static class ProxyController
     {
         /// <summary>
-        /// 
+        /// Add the ProxyMiddleware to pipeline.
         /// </summary>
-        /// <param name="app"></param>
         public static void ExecuteProxy(this IApplicationBuilder app, Uri baseUri, string apiKey)
         {
+            //Adding the configurable stuff.
             var options = new ProxyOptions
             {
                 Scheme = baseUri.Scheme,
@@ -22,6 +22,7 @@ namespace LogProxy.Core
                 AppendQuery = new QueryString(baseUri.Query),
                 ApiKey = apiKey
             };
+
             app.UseMiddleware<ProxyMiddleware>(Options.Create(options));
         }
     }
