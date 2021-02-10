@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LogProxy.Core.General;
+using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace LogProxy.Core
             foreach (var header in responseMessage.Content.Headers)
                 _context.Response.Headers[header.Key] = header.Value.ToArray();
 
-            _context.Response.Headers.Remove("transfer-encoding");
+            _context.Response.Headers.Remove(StaticValues.TRANSFER_ENCODING);
         }
     }
 }

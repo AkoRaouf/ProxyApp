@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace LogProxy.Core
+namespace LogProxy.Core.General
 {
     public static class Extention
     {

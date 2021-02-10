@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LogProxy.Core.General;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using System;
 using System.Net.Http;
 
@@ -10,9 +12,12 @@ namespace LogProxy.Core
     public class RequestHandler
     {
         private readonly HttpContext _context;
-        public RequestHandler(HttpContext context)
+        private readonly ProxyOptions _options;
+
+        public RequestHandler(HttpContext context, ProxyOptions proxyOptions)
         {
             _context = context;
+            _options = proxyOptions;
         }
 
         /// <summary>
@@ -56,6 +61,8 @@ namespace LogProxy.Core
 
             foreach (var header in context.Request.Headers)
                 requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+
+            requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(StaticValues.AUTHENTICATION_SCHEME, _options.ApiKey);
         }
 
         /// <summary>
@@ -67,11 +74,9 @@ namespace LogProxy.Core
         {
             Uri targetUri = null;
 
-            if (request.Path.StartsWithSegments("/Logger"))
-            {
-                targetUri = new Uri("https://api.airtable.com/v0/appD1b1YjWoXkUJwR/Messages" + request.QueryString);
-            }
-
+            if (request.Path.StartsWithSegments(StaticValues.LOGGER_PATH))
+                targetUri = new Uri(UriHelper.BuildAbsolute(_options.Scheme, _options.Host, _options.PathBase, default, _context.Request.QueryString.Add(_options.AppendQuery)));
+            
             return targetUri;
         }
     }

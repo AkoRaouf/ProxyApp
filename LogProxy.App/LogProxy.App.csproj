@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LogProxy.Common\LogProxy.Common.csproj" />
     <ProjectReference Include="..\LogProxy.Core\LogProxy.Core.csproj" />
   </ItemGroup>
 
