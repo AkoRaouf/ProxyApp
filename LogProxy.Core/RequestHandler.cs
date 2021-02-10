@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 
@@ -16,8 +18,9 @@ namespace LogProxy.Core
 
         public HttpRequestMessage CreateTargetRequest()
         {
-            var targetUri = BuildTargetUri(_context.Request) 
-                ?? throw new Exception("There is an error in specifying the target URI"); 
+            var targetUri = BuildTargetUri(_context.Request);
+            if (!targetUri.IsValid())
+                return null;
 
             var requestMessage = new HttpRequestMessage();
             CopyFromOriginalRequestContentAndHeaders(_context, requestMessage);
@@ -40,21 +43,20 @@ namespace LogProxy.Core
             {
                 var streamContent = new StreamContent(context.Request.Body);
                 requestMessage.Content = streamContent;
+                requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(context.Request.ContentType);
             }
 
             foreach (var header in context.Request.Headers)
-            {
-                requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
-            }
+                requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
         }
 
         private Uri BuildTargetUri(HttpRequest request)
         {
             Uri targetUri = null;
 
-            if (request.Path.StartsWithSegments("/googleforms", out var remainingPath))
+            if (request.Path.StartsWithSegments("/Logger"))
             {
-                targetUri = new Uri("https://docs.google.com/forms" + remainingPath);
+                targetUri = new Uri("https://api.airtable.com/v0/appD1b1YjWoXkUJwR/Messages" + request.QueryString);
             }
 
             return targetUri;

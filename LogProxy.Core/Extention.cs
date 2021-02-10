@@ -10,7 +10,12 @@ namespace LogProxy.Core
     {
         public static bool IsValid(this HttpRequestMessage httpRequestMessage)
         {
-            return httpRequestMessage != null ? true : false;
+            return httpRequestMessage != null;
+        }
+
+        public static bool IsValid(this Uri uri)
+        {
+            return uri != null;
         }
         public static HttpMethod GetMethod(this string method)
         {
