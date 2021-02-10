@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
-using System.Text;
 
 namespace LogProxy.Core
 {
+    /// <summary>
+    /// Handel all operations related to preparing a request to send to the final destination.
+    /// </summary>
     public class RequestHandler
     {
         private readonly HttpContext _context;
@@ -16,6 +15,10 @@ namespace LogProxy.Core
             _context = context;
         }
 
+        /// <summary>
+        /// Created request for send to destination.
+        /// </summary>
+        /// <returns>destination Http Request Message</returns>
         public HttpRequestMessage CreateTargetRequest()
         {
             var targetUri = BuildTargetUri(_context.Request);
@@ -32,6 +35,11 @@ namespace LogProxy.Core
             return requestMessage;
         }
 
+        /// <summary>
+        /// Copy the http headers and body content from origin request into destination request.
+        /// </summary>
+        /// <param name="context">The Http Context that contains the origin request</param>
+        /// <param name="requestMessage">The destination Http Request Message</param>
         private void CopyFromOriginalRequestContentAndHeaders(HttpContext context, HttpRequestMessage requestMessage)
         {
             var requestMethod = context.Request.Method;
@@ -50,6 +58,11 @@ namespace LogProxy.Core
                 requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
         }
 
+        /// <summary>
+        /// Buidl the target or final destination Uri.
+        /// </summary>
+        /// <param name="request">the origin Http request</param>
+        /// <returns></returns>
         private Uri BuildTargetUri(HttpRequest request)
         {
             Uri targetUri = null;

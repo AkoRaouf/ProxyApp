@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LogProxy.Core
 {
+    /// <summary>
+    /// Handel all operations related to preparing a response.
+    /// </summary>
     public class ResponseHandler
     {
         private readonly HttpContext _context;
@@ -17,6 +16,11 @@ namespace LogProxy.Core
             _context = context;
         }
 
+        /// <summary>
+        /// Copy the response has gotten from destination or target to the response should be sent to the origin.
+        /// </summary>
+        /// <param name="httpResponseMessage"></param>
+        /// <returns></returns>
         public async Task CopyToCurrentResponseAsync(HttpResponseMessage httpResponseMessage)
         {
             _context.Response.StatusCode = (int)httpResponseMessage.StatusCode;
@@ -24,6 +28,10 @@ namespace LogProxy.Core
             await httpResponseMessage.Content.CopyToAsync(_context.Response.Body);
         }
 
+        /// <summary>
+        /// Copy from target response header.
+        /// </summary>
+        /// <param name="responseMessage">the origin Response Message</param>
         private void CopyFromTargetResponseHeaders(HttpResponseMessage responseMessage)
         {
             foreach (var header in responseMessage.Headers)

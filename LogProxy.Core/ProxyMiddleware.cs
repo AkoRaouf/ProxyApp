@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace LogProxy.Core
 {
+    /// <summary>
+    /// As midderware handels all proxy realated operations.
+    /// </summary>
     public class ProxyMiddleware
     {
         private static readonly HttpClient _httpClient = new HttpClient();
@@ -14,6 +17,10 @@ namespace LogProxy.Core
             _nextMiddleware = nextMiddleware;
         }
 
+        /// <summary>
+        /// Executes the whole proxy proccess.
+        /// </summary>
+        /// <param name="httpContext">Http Context</param>
         public async Task Invoke(HttpContext context)
         {
             var requestHandler = new RequestHandler(context);
