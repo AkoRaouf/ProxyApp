@@ -1,4 +1,3 @@
-using LogProxy.App.Genaral;
 using LogProxy.App.General;
 using LogProxy.Common;
 using LogProxy.Core;

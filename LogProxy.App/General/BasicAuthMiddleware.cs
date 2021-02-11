@@ -1,4 +1,4 @@
-﻿using LogProxy.App.Genaral;
+﻿using LogProxy.Common;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Text;
