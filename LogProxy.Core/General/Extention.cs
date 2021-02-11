@@ -24,6 +24,14 @@ namespace LogProxy.Core.General
             return uri != null;
         }
 
+        public static bool IsValid(this HttpMethod httpMethod)
+        {
+            if (httpMethod == HttpMethod.Get || httpMethod == HttpMethod.Post)
+                return true;
+
+            return false;
+        }
+
         /// <summary>
         /// Represnts the HttpMethod based on string value.
         /// </summary>

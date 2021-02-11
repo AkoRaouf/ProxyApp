@@ -27,15 +27,18 @@ namespace LogProxy.Core
         /// <param name="httpContext">Http Context</param>
         public async Task Invoke(HttpContext context)
         {
-            var requestHandler = new RequestHandler(context, _options);
-            var responseHandler = new ResponseHandler(context);
-
-            var targetRequestMessage = requestHandler.CreateTargetRequest();
-            if (targetRequestMessage.IsValid())
+            if (context.Request.Method.GetMethod().IsValid())
             {
-                using var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted);
-                await responseHandler.CopyToCurrentResponseAsync(responseMessage);
-                return;
+                var requestHandler = new RequestHandler(context, _options);
+                var responseHandler = new ResponseHandler(context);
+
+                var targetRequestMessage = requestHandler.CreateTargetRequest();
+                if (targetRequestMessage.IsValid())
+                {
+                    using var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted);
+                    await responseHandler.CopyToCurrentResponseAsync(responseMessage);
+                    return;
+                }
             }
             await _nextMiddleware(context);
         }

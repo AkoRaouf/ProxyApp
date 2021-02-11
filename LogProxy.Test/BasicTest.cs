@@ -16,7 +16,7 @@ namespace LogProxy.Test
         public MainTest(ProxyWebAppFactory<App.Startup> factory)
         {
             _factory = factory;
-            var _authenticatedClient = _factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions() { HandleCookies = false });
+            _authenticatedClient = _factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions() { HandleCookies = false });
             string username = "LoggerAPIUser";
             string password = "LoggerAPIPass";
             string svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
