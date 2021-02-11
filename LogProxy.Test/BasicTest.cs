@@ -24,7 +24,7 @@ namespace LogProxy.Test
         }
 
         [Fact]
-        public async void Is_Reject_Unauthorized_User()
+        public async void Is_Unauthorized_User_Rejected()
         {
             //Arrange
             var client = _factory.CreateClient();

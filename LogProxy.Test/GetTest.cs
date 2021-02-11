@@ -15,9 +15,10 @@ namespace LogProxy.Test
         public async void Is_Get_Returns_OK_Response()
         {
             //Arrange
-            
+            var path = "/Logger?maxRecords=1&view=Grid view";
+
             //Act
-            var response = await _authenticatedClient.GetAsync("/Logger?maxRecords=1&view=Grid view");
+            var response = await _authenticatedClient.GetAsync(path);
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -27,13 +28,14 @@ namespace LogProxy.Test
         public async void Is_Get_ResponseType_Json()
         {
             //Arrange
-           
+            var path = "/Logger?maxRecords=1&view=Grid view";
+            var responseContentType = "application/json; charset=utf-8";
             //Act
-            var response = await _authenticatedClient.GetAsync("/Logger?maxRecords=1&view=Grid view");
+            var response = await _authenticatedClient.GetAsync(path);
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+            Assert.Equal(responseContentType, response.Content.Headers.ContentType.ToString());
         }
 
         [Theory]
@@ -45,10 +47,10 @@ namespace LogProxy.Test
         public async void Is_Get_Response_ResultCount(int numberOfRecords)
         {
             //Arrange
-           
+            var path = $"/Logger?maxRecords={numberOfRecords}&view=Grid view";
+
             //Act
-            
-            var response = await _authenticatedClient.GetAsync($"/Logger?maxRecords={numberOfRecords}&view=Grid view");
+            var response = await _authenticatedClient.GetAsync(path);
             var getJsonObject = JsonConvert.DeserializeObject<Root>(await response.Content.ReadAsStringAsync());
 
             //Assert

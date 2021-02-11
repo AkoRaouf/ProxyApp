@@ -1,8 +1,6 @@
 ﻿using LogProxy.Test.General;
 using LogProxy.Test.Sample;
 using Newtonsoft.Json;
-using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Xunit;
@@ -17,9 +15,10 @@ namespace LogProxy.Test
             //Arrange
             HttpContent c = new StringContent(JsonConvert.SerializeObject(SamplePostData.Get()));
             c.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var path = "/Logger";
 
             //Act
-            var response = await _authenticatedClient.PostAsync("/Logger", c);
+            var response = await _authenticatedClient.PostAsync(path, c);
             var postJsonResponse = JsonConvert.DeserializeObject<PostJsonResponse.Root>(await response.Content.ReadAsStringAsync());
 
             //Assert
